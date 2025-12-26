@@ -1,0 +1,9 @@
+#!/bin/sh
+
+size="$1"
+
+guix time-machine -C channels.scm -- system image \
+    --image-size="$size" \
+    --image-type=qcow2 \
+    system.scm \
+    --root=image.qcow2
