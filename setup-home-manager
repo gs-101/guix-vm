@@ -1,0 +1,15 @@
+#!/usr/bin/env bash
+
+nix-channel --add https://nixos.org/channels/nixpkgs-unstable
+nix-channel --add https://github.com/gs-101/home-manager/archive/feat/non-nixos-gpu-shepherd-test.tar.gz home-manager
+nix-channel --update
+
+# See https://guix.gnu.org/manual/devel/en/html_node/Miscellaneous-Services.html
+sudo mkdir -p /nix/var/nix/profiles/per-user/$USER
+sudo chown $USER:root /nix/var/nix/profiles/per-user/$USER
+ln -s "/nix/var/nix/profiles/per-user/$USER/profile" ~/.nix-profile
+source /run/current-system/profile/etc/profile.d/nix.sh
+
+nix-shell '<home-manager>' -A install
+source $HOME/.nix-profile/etc/profile.d/hm-session-vars.sh
+home-manager switch
