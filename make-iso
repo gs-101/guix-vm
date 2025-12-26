@@ -1,0 +1,21 @@
+#!/bin/sh
+
+size="$1"
+memory="$2"
+
+guix time-machine -C channels.scm -- system image \
+    --image-type=iso9660 \
+    system.scm \
+    --root=image.iso
+qemu-img create \
+    -f qcow2 \
+    guix-system.img \
+    "$size"
+qemu-system-x86_64 \
+    -m "$memory" \
+    -smp 1 \
+    -enable-kvm \
+    -nic user,model=virtio-net-pci \
+    -boot menu=on,order=d \
+    -drive file=guix-system.img \
+    -drive media=cdrom,readonly=on,file=image.iso
