@@ -13,6 +13,10 @@
               (targets '("null"))))
  (file-systems %base-file-systems)
  (services (cons* (service gnome-desktop-service-type)
+                  (service nix-service-type
+                           (nix-configuration
+                            (extra-config
+                             '("experimental-features = nix-command flakes"))))
                   %desktop-services))
  (users (cons* (user-account
                 (name "bob")
